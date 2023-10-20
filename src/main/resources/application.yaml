@@ -1,0 +1,5 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://root:280301@miniblogproject.1kddnmd.mongodb.net/?retryWrites=true&w=majority
+      database: MiniBlogs

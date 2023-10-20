@@ -1,0 +1,773 @@
+openapi: '3.0.1'
+
+info:
+  title: "My API"
+  description: "My API description"
+  version: "1.0.0"
+
+servers:
+  - url: "http://localhost:8080/api/v1"
+    description: "Local server"
+
+tags:
+  - name: "blogs"
+    description: "Blogs operations"
+  - name: "categories"
+    description: "Categories operations"
+  - name: "authors"
+    description: "Authors operations"
+
+paths:
+  /blogs:
+    get:
+      summary: "Get all blogs"
+      operationId: "getAllBlogs"
+      tags:
+        - "blogs"
+      responses:
+        '200':
+          $ref: '#/components/responses/Blogs'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: "Create a blog"
+      operationId: "createBlog"
+      tags:
+        - "blogs"
+      requestBody:
+        description: "Blog to create"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BlogReq"
+      responses:
+        '200':
+          $ref: '#/components/responses/Blog'
+        '201':
+          $ref: '#/components/responses/Blog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /blogs/{id}:
+    get:
+        summary: "Get a blog by id"
+        operationId: "getBlogById"
+        tags:
+            - "blogs"
+        parameters:
+            - name: "id"
+              in: "path"
+              description: "Blog id"
+              required: true
+              schema:
+                  type: string
+        responses:
+          '200':
+            $ref: '#/components/responses/Blog'
+          '201':
+            $ref: '#/components/responses/Blog'
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '403':
+            $ref: '#/components/responses/Forbidden'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
+    put:
+        summary: "Update a blog"
+        operationId: "updateBlog"
+        tags:
+            - "blogs"
+        parameters:
+            - name: "id"
+              in: "path"
+              description: "Blog id"
+              required: true
+              schema:
+                type: string
+        requestBody:
+            description: "Blog to update"
+            required: true
+            content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/BlogReq"
+        responses:
+          '200':
+            $ref: '#/components/responses/Blog'
+          '201':
+            $ref: '#/components/responses/Blog'
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '403':
+            $ref: '#/components/responses/Forbidden'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
+    delete:
+        summary: "Delete a blog"
+        operationId: "deleteBlog"
+        tags:
+            - "blogs"
+        parameters:
+            - name: "id"
+              in: "path"
+              description: "Blog id"
+              required: true
+              schema:
+                type: string
+        responses:
+          '200':
+            $ref: '#/components/responses/Blog'
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '403':
+            $ref: '#/components/responses/Forbidden'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
+    patch:
+        summary: "Approve a blog"
+        operationId: "approveBlog"
+        tags:
+            - "blogs"
+        parameters:
+            - name: "id"
+              in: "path"
+              description: "Blog id"
+              required: true
+              schema:
+                type: string
+        requestBody:
+            description: "Blog to approve"
+            required: true
+            content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/BlogApproveReq"
+        responses:
+          '200':
+            $ref: '#/components/responses/Blog'
+          '201':
+            $ref: '#/components/responses/Blog'
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '403':
+            $ref: '#/components/responses/Forbidden'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
+
+  /categories:
+    get:
+      summary: "Get all categories"
+      operationId: "getAllCategories"
+      tags:
+        - "categories"
+      responses:
+        '200':
+          $ref: '#/components/responses/Categories'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: "Create a category"
+      operationId: "createCategory"
+      tags:
+        - "categories"
+      requestBody:
+        description: "Category to create"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+      responses:
+        '200':
+          $ref: '#/components/responses/Category'
+        '201':
+          $ref: '#/components/responses/Category'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /categories/{id}:
+    put:
+        summary: "Update a category"
+        operationId: "updateCategory"
+        tags:
+            - "categories"
+        parameters:
+            - name: "id"
+              in: "path"
+              description: "Category id"
+              required: true
+              schema:
+                type: string
+        requestBody:
+            description: "Category to update"
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Category"
+        responses:
+          '200':
+            $ref: '#/components/responses/Category'
+          '201':
+            $ref: '#/components/responses/Category'
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '403':
+            $ref: '#/components/responses/Forbidden'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
+    delete:
+        summary: "Delete a category"
+        operationId: "deleteCategory"
+        tags:
+            - "categories"
+        parameters:
+            - name: "id"
+              in: "path"
+              description: "Category id"
+              required: true
+              schema:
+                type: string
+        responses:
+          '200':
+            $ref: '#/components/responses/Category'
+          '201':
+            $ref: '#/components/responses/Category'
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '403':
+            $ref: '#/components/responses/Forbidden'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
+
+  /categories/{id}/blogs:
+    get:
+      summary: "Get all blogs by category id"
+      operationId: "getAllBlogsByCategoryId"
+      tags:
+        - "blogs"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Category id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Blogs'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /authors:
+    get:
+      summary: "Get all authors"
+      operationId: "getAllAuthors"
+      tags:
+        - "authors"
+      responses:
+        '200':
+          $ref: '#/components/responses/Authors'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+        summary: "Create an author"
+        operationId: "createAuthor"
+        tags:
+            - "authors"
+        requestBody:
+            description: "Author to create"
+            required: true
+            content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Author"
+        responses:
+          '200':
+            $ref: '#/components/responses/Author'
+          '201':
+            $ref: '#/components/responses/Author'
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '403':
+            $ref: '#/components/responses/Forbidden'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
+
+  /authors/{id}:
+    get:
+        summary: "Get an author by id"
+        operationId: "getAuthorById"
+        tags:
+            - "authors"
+        parameters:
+            - name: "id"
+              in: "path"
+              description: "Author id"
+              required: true
+              schema:
+                type: string
+        responses:
+          '200':
+            $ref: '#/components/responses/Author'
+          '201':
+            $ref: '#/components/responses/Author'
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '403':
+            $ref: '#/components/responses/Forbidden'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
+    put:
+        summary: "Update an author"
+        operationId: "updateAuthor"
+        tags:
+            - "authors"
+        parameters:
+            - name: "id"
+              in: "path"
+              description: "Author id"
+              required: true
+              schema:
+                type: string
+        requestBody:
+            description: "Author to update"
+            required: true
+            content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Author"
+        responses:
+          '200':
+            $ref: '#/components/responses/Author'
+          '201':
+            $ref: '#/components/responses/Author'
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '403':
+            $ref: '#/components/responses/Forbidden'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
+    delete:
+        summary: "Delete an author"
+        operationId: "deleteAuthor"
+        tags:
+            - "authors"
+        parameters:
+            - name: "id"
+              in: "path"
+              description: "Author id"
+              required: true
+              schema:
+                type: string
+        responses:
+          '200':
+            $ref: '#/components/responses/Author'
+          '201':
+            $ref: '#/components/responses/Author'
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '403':
+            $ref: '#/components/responses/Forbidden'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
+
+  /authors/{id}/blogs:
+    get:
+      summary: "Get all blogs by author id"
+      operationId: "getAllBlogsByAuthorId"
+      tags:
+        - "authors"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Author id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Blogs'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+    schemas:
+        Blog:
+          type: object
+          required:
+              - id
+              - title
+              - content
+          properties:
+              id:
+                type: string
+                minLength: 20
+                example: '65320297d344e36796822b5e'
+              title:
+                type: string
+                minLength: 10
+                example: 'My blog title'
+              summary:
+                type: string
+                example: 'My blog summary'
+              publicDate:
+                type: string
+                example: '2020-01-01T00:00:00.000Z'
+              source:
+                type: string
+                example: 'https://www.google.com'
+              image:
+                type: string
+                example: 'https://www.google.com'
+              content:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      example: 'part 1'
+                    detail:
+                      type: string
+                      example: 'part 1 detail'
+              categories:
+                type: array
+                items:
+                  type: string
+                  minLength: 20
+                  example: '65320297d344e36796822b5e'
+              authorId:
+                type: string
+                minLength: 20
+                example: '65320297d344e36796822b5e'
+              createDate:
+                type: string
+                example: '2020-01-01T00:00:00.000Z'
+              updateDate:
+                type: string
+                example: '2020-01-01T00:00:00.000Z'
+              approved:
+                type: boolean
+                example: true
+        Blogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Blog'
+
+        Category:
+          type: object
+          required:
+            - id
+            - name
+            - description
+          properties:
+            id:
+              type: string
+              minLength: 20
+              example: '65320297d344e36796822b5e'
+            name:
+              type: string
+              minLength: 10
+              example: 'Sports'
+            description:
+              type: string
+              example: 'Sports category'
+        Categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+
+        Author:
+          type: object
+          required:
+              - id
+              - name
+              - email
+          properties:
+              id:
+                type: string
+                minLength: 20
+                example: '65320297d344e36796822b5e'
+              name:
+                type: string
+                minLength: 10
+                example: 'My name'
+              email:
+                type: string
+                format: email
+                example: 'user@gmail.com'
+              bio:
+                type: string
+                example: 'My bio'
+              avatar:
+                type: string
+                example: 'https://www.google.com'
+        Authors:
+            type: array
+            items:
+                $ref: '#/components/schemas/Author'
+        BlogReq:
+          type: object
+          required:
+            - title
+            - content
+            - authorId
+            - categoryIds
+          properties:
+            title:
+              type: string
+              minLength: 10
+              example: 'My blog title'
+            summary:
+                type: string
+                example: 'My blog summary'
+            image:
+                type: string
+                example: 'https://www.google.com'
+            publicDate:
+              type: string
+              example: '2020-01-01T00:00:00.000Z'
+            source:
+              type: string
+              example: 'https://www.google.com'
+            content:
+              type: array
+              items:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    example: 'part 1'
+                  detail:
+                    type: string
+                    example: 'part 1 detail'
+            authorId:
+              type: string
+              minLength: 20
+              example: '65320297d344e36796822b5e'
+            categories:
+              type: array
+              items:
+                type: string
+                minLength: 20
+                example: '65320297d344e36796822b5e'
+
+        BlogApproveReq:
+          type: object
+          required:
+            - id
+            - blogId
+            - approved
+            - authorId
+          properties:
+            id:
+              type: string
+              minLength: 20
+              example: '65320297d344e36796822b5e'
+            approved:
+              type: boolean
+              example: true
+            blogId:
+              type: string
+              minLength: 20
+              example: '65320297d344e36796822b5e'
+            authorId:
+              type: string
+              minLength: 20
+              example: '65320297d344e36796822b5e'
+        Error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: integer
+              format: int32
+              example: 400
+            message:
+              type: string
+              example: 'Bad Request'
+    responses:
+      Blog:
+        description: "Blog"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Blog"
+      Blogs:
+        description: "Blogs"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Blogs"
+      Category:
+        description: "Category"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+      Categories:
+        description: "Categories"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Categories"
+      Author:
+        description: "Author"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Author"
+      Authors:
+        description: "Authors"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Authors"
+      Error:
+        description: "Error"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+      OK:
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Blog'
+      Created:
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Blog'
+      BadRequest:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      Unauthorized:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      Forbidden:
+        description: Forbidden
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      NotFound:
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      InternalServerError:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
