@@ -16,6 +16,7 @@ import java.util.List;
 @Service
 public class BlogService implements BlogsApiDelegate {
     IBlogRepository blogRepository;
+
     private final BlogMapper blogMapper;
     private final BlogValidator blogValidator;
     private final AuthorValidator authorValidator;

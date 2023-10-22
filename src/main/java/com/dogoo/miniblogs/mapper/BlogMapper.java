@@ -9,10 +9,9 @@ import com.dogoo.miniblogs.repository.IBlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 @Component
 public class BlogMapper {
@@ -23,8 +22,15 @@ public class BlogMapper {
         this.todoRepository = todoRepository;
     }
 
+
+    //Convert BlogEntity from BlogReq to save to database
+    //Using when create new blog
     public BlogEntity mapBlogEntityFromBlogReq(BlogReq from) {
         BlogEntity to = new BlogEntity();
+        LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formatDateTime = date.format(formatter);
+
         to.setAuthorId(from.getAuthorId());
         to.setSummary(from.getSummary());
         to.setTitle(from.getTitle());
@@ -33,14 +39,20 @@ public class BlogMapper {
         to.setImage(from.getImage());
         to.setCategories(from.getCategories());
         to.setContent(from.getContent());
-        to.setCreatedDate("2021-01-01");
+        to.setCreatedDate(formatDateTime);
         to.setUpdatedDate("2021-01-01");
         to.setApproved(false);
         return to;
     }
 
+    //Convert BlogEntity from BlogReq to save to database
+    //Using when update blog
     public BlogEntity mapBlogEntityFromBlogReq(String id, BlogReq from) {
         BlogEntity to = todoRepository.findById(id).get();
+        LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formatDateTime = date.format(formatter);
+
         to.setId(id);
         to.setAuthorId(from.getAuthorId());
         to.setSummary(from.getSummary());
@@ -50,8 +62,7 @@ public class BlogMapper {
         to.setImage(from.getImage());
         to.setCategories(from.getCategories());
         to.setContent(from.getContent());
-        to.setCreatedDate("2021-01-01");
-        to.setUpdatedDate("2021-01-01");
+        to.setUpdatedDate(formatDateTime);
         to.setApproved(false);
         return to;
     }
@@ -74,8 +85,8 @@ public class BlogMapper {
         to.setImage(from.getImage());
         to.setCategories(from.getCategories());
         to.setContent(from.getContent());
-        to.setCreateDate("2021-01-01");
-        to.setUpdateDate("2021-01-01");
+        to.setCreateDate(from.getCreatedDate());
+        to.setUpdateDate(from.getUpdatedDate());
         to.setAuthorId(from.getAuthorId());
         to.setApproved(from.isApproved());
         return to;

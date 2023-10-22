@@ -4,33 +4,41 @@ import com.dogoo.miniblogs.model.Blog;
 import com.dogoo.miniblogs.model.BlogReq;
 import com.dogoo.miniblogs.service.BlogService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-public class BlogController implements BlogsApi{
+@CrossOrigin(origins = "http://localhost:3002", allowedHeaders = "*")
+@RequestMapping("/api/v2")
+@RestController
+public class BlogController {
     private final BlogService blogService;
 
     public BlogController(BlogService blogService) {
         this.blogService = blogService;
     }
 
-    @Override
+    @GetMapping("/blogs")
     public ResponseEntity<List<Blog>> getAllBlogs() {
         return blogService.getAllBlogs();
     }
 
-    @Override
-    public ResponseEntity<Blog> getBlogById(String id) {
+    @GetMapping("/blogs/{id}")
+    public ResponseEntity<Blog> getBlogById(@PathVariable String id) {
         return blogService.getBlogById(id);
     }
 
-    @Override
-    public ResponseEntity<Blog> updateBlog(String id, BlogReq blogReq) {
+    @PutMapping("/blogs/{id}")
+    public ResponseEntity<Blog> updateBlog(@PathVariable String id,@RequestBody BlogReq blogReq) {
         return blogService.updateBlog(id, blogReq);
     }
+    @PostMapping("/blogs")
+    public ResponseEntity<Blog> createBlog(@RequestBody BlogReq blogReq) {
+        return blogService.createBlog(blogReq);
+    }
 
-    @Override
-    public ResponseEntity<Blog> deleteBlog(String id) {
+    @DeleteMapping("/blogs/{id}")
+    public ResponseEntity<Blog> deleteBlog(@PathVariable String id) {
         return blogService.deleteBlog(id);
     }
 }
