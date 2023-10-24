@@ -63,14 +63,20 @@ public class BlogMapper {
         to.setCategories(from.getCategories());
         to.setContent(from.getContent());
         to.setUpdatedDate(formatDateTime);
-        to.setApproved(false);
         return to;
     }
 
-    public BlogEntity mapBlogEntityFromBlogApproveReq(String id, BlogApproveReq from) {
-        BlogEntity to = todoRepository.findById(id).get();
-        to.setAuthorId(from.getAuthorId());
+    public BlogEntity mapBlogEntityFromBlog(Blog from) {
+        BlogEntity to = new BlogEntity();
         to.setId(from.getId());
+        to.setTitle(from.getTitle());
+        to.setSummary(from.getSummary());
+        to.setSource(from.getSource());
+        to.setPublicDate(from.getPublicDate());
+        to.setImage(from.getImage());
+        to.setCategories(from.getCategories());
+        to.setContent(from.getContent());
+        to.setUpdatedDate(from.getUpdateDate());
         to.setApproved(from.getApproved());
         return to;
     }

@@ -4,6 +4,7 @@ import com.dogoo.miniblogs.api.BlogsApiDelegate;
 import com.dogoo.miniblogs.entity.BlogEntity;
 import com.dogoo.miniblogs.mapper.BlogMapper;
 import com.dogoo.miniblogs.model.Blog;
+import com.dogoo.miniblogs.model.BlogApproveReq;
 import com.dogoo.miniblogs.model.BlogReq;
 import com.dogoo.miniblogs.repository.IBlogRepository;
 import com.dogoo.miniblogs.validator.AuthorValidator;
@@ -69,6 +70,20 @@ public class BlogService implements BlogsApiDelegate {
         Blog blog = blogMapper.mapBlogFromBlogEntity(blogRepository.findById(id).get());
         blogRepository.deleteById(id);
         return ResponseEntity.ok(blog);
+    }
+
+    @Override
+    public ResponseEntity<List<Blog>> getBlogsByTitle(String key) {
+        List<Blog> blogs = blogMapper.mapBlogListFromBlogEntityList(blogRepository.findBlogEntitiesByTitleOrId(key, key));
+        return ResponseEntity.ok(blogs);
+    }
+
+    @Override
+    public ResponseEntity<Blog> approveBlog(String id) {
+        BlogEntity blogEntity = blogRepository.findById(id).get();
+        blogEntity.setApproved(true);
+        blogRepository.save(blogEntity);
+        return ResponseEntity.ok(blogMapper.mapBlogFromBlogEntity(blogEntity));
     }
 
 }
