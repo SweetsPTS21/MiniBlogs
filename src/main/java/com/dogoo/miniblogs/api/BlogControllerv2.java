@@ -18,10 +18,10 @@ public class BlogControllerv2 {
         this.blogService = blogService;
     }
 
-    @GetMapping("/blogs")
-    public ResponseEntity<List<Blog>> getAllBlogs() {
-        return blogService.getAllBlogs();
-    }
+//    @GetMapping("/blogs")
+//    public ResponseEntity<List<Blog>> getAllBlogs() {
+//        return blogService.getAllBlogs();
+//    }
 
     @GetMapping("/blogs/{id}")
     public ResponseEntity<Blog> getBlogById(@PathVariable String id) {

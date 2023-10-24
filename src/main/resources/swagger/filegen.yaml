@@ -26,6 +26,21 @@ paths:
       operationId: "getAllBlogs"
       tags:
         - "blogs"
+      parameters:
+        - name: limit
+          in: query
+          description: The number of blogs to return
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          description: The number of blogs to skip
+          required: true
+          schema:
+            type: integer
+            format: int32
       responses:
         '200':
           $ref: '#/components/responses/Blogs'

@@ -4,11 +4,13 @@ import com.dogoo.miniblogs.api.BlogsApiDelegate;
 import com.dogoo.miniblogs.entity.BlogEntity;
 import com.dogoo.miniblogs.mapper.BlogMapper;
 import com.dogoo.miniblogs.model.Blog;
-import com.dogoo.miniblogs.model.BlogApproveReq;
 import com.dogoo.miniblogs.model.BlogReq;
+import com.dogoo.miniblogs.repository.BlogEntityRepository;
 import com.dogoo.miniblogs.repository.IBlogRepository;
 import com.dogoo.miniblogs.validator.AuthorValidator;
 import com.dogoo.miniblogs.validator.BlogValidator;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +24,21 @@ public class BlogService implements BlogsApiDelegate {
     private final BlogValidator blogValidator;
     private final AuthorValidator authorValidator;
 
-    public BlogService(IBlogRepository blogRepository, BlogMapper blogMapper, BlogValidator blogValidator, AuthorValidator authorValidator) {
+    private final BlogEntityRepository blogEntityRepository;
+
+    public BlogService(IBlogRepository blogRepository, BlogMapper blogMapper, BlogValidator blogValidator, AuthorValidator authorValidator, BlogEntityRepository blogEntityRepository) {
         this.blogRepository = blogRepository;
         this.blogMapper = blogMapper;
         this.blogValidator = blogValidator;
         this.authorValidator = authorValidator;
+        this.blogEntityRepository = blogEntityRepository;
     }
 
     @Override
-    public ResponseEntity<List<Blog>> getAllBlogs() {
-        List<Blog> blogs = blogMapper.mapBlogListFromBlogEntityList(blogRepository.findAll());
+    public ResponseEntity<List<Blog>> getAllBlogs(Integer limit, Integer offset) {
+        //Pageable pageable = PageRequest.of(offset, limit);
+        List<BlogEntity> blogEntities = blogEntityRepository.getAllByLimitAndOffset(limit, offset);
+        List<Blog> blogs = blogMapper.mapBlogListFromBlogEntityList(blogEntities);
         return ResponseEntity.ok(blogs);
     }
 
