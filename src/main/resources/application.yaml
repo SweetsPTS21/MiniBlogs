@@ -3,3 +3,13 @@ spring:
     mongodb:
       uri: mongodb+srv://root:280301@miniblogproject.1kddnmd.mongodb.net/?retryWrites=true&w=majority
       database: MiniBlogs
+  jpa:
+    properties:
+      hibernate:
+        search:
+          default:
+            indexmanager: elasticsearch
+            elasticsearch:
+              host: https://localhost:9200/
+              index_schema_management_strategy: drop-and-create
+              required_index_status: yellow

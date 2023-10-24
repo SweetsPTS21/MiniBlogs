@@ -73,8 +73,10 @@ public class BlogService implements BlogsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<Blog>> getBlogsByTitle(String key) {
-        List<Blog> blogs = blogMapper.mapBlogListFromBlogEntityList(blogRepository.findBlogEntitiesByTitleOrId(key, key));
+    public ResponseEntity<List<Blog>> getBlogsByFilter(String key, Boolean approve) {
+        approve = approve != null && approve;
+        key = key == null ? "" : key;
+        List<Blog> blogs = blogMapper.mapBlogListFromBlogEntityList(blogRepository.findBlogEntitiesByTitleAndApproved(key, approve));
         return ResponseEntity.ok(blogs);
     }
 
@@ -85,5 +87,7 @@ public class BlogService implements BlogsApiDelegate {
         blogRepository.save(blogEntity);
         return ResponseEntity.ok(blogMapper.mapBlogFromBlogEntity(blogEntity));
     }
+
+
 
 }

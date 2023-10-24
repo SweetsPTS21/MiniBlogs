@@ -16,6 +16,8 @@ tags:
     description: "Categories operations"
   - name: "authors"
     description: "Authors operations"
+  - name: "contact"
+    description: "Contact from user"
 
 paths:
   /blogs:
@@ -66,17 +68,23 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /blogs/search:
     get:
-      summary: Get blogs by title
-      operationId: "getBlogsByTitle"
+      summary: Get blogs by filter
+      operationId: "getBlogsByFilter"
       tags:
         - "blogs"
       parameters:
         - name: key
           in: query
-          description: The name or Id of the blog to search for
-          required: true
+          description: The name or Id of the blog to search
+          required: false
           schema:
             type: string
+        - name: approve
+          in: query
+          description: The approval status to search
+          required: false
+          schema:
+            type: boolean
       responses:
         '200':
           $ref: '#/components/responses/Blogs'
@@ -505,6 +513,53 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+
+  /contact:
+    get:
+        summary: "Get contact info"
+        operationId: "getContactInfo"
+        tags:
+            - "contact"
+        responses:
+          '200':
+            $ref: '#/components/responses/Contacts'
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '403':
+            $ref: '#/components/responses/Forbidden'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
+    post:
+        summary: "Create contact info"
+        operationId: "createContactInfo"
+        tags:
+            - "contact"
+        requestBody:
+            description: "Contact info"
+            required: true
+            content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Contact"
+        responses:
+          '200':
+            $ref: '#/components/responses/Contact'
+          '201':
+            $ref: '#/components/responses/Contact'
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '403':
+            $ref: '#/components/responses/Forbidden'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
 components:
     schemas:
         Blog:
@@ -568,7 +623,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Blog'
-
+        Contact:
+          type: object
+          required:
+            - email
+            - name
+            - message
+          properties:
+            email:
+              type: string
+              format: email
+              example: 'abc@gmail.com'
+            name:
+                type: string
+                example: 'Thanh Nam'
+            message:
+                type: string
+                example: 'Xin chao Lolia'
+        Contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
         Category:
           type: object
           required:
@@ -716,6 +791,18 @@ components:
           application/json:
             schema:
               $ref: "#/components/schemas/Blogs"
+      Contact:
+        description: "Contact"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+      Contacts:
+        description: "Contacts"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Contacts"
       Category:
         description: "Category"
         content:
