@@ -12,7 +12,7 @@ import java.util.List;
 public interface IBlogRepository extends MongoRepository<BlogEntity, String> {
     @Query("{'authorId': ?0}")
     List<BlogEntity> getBlogEntitiesByAuthorId(String authorId);
-    @Query("{'$and': [{'title': {$regex: ?0, $options: 'i'}}, {'approved': ?1 }]}")
-    List<BlogEntity> findBlogEntitiesByTitleAndApproved(String title, boolean approved);
+    @Query("{'approved': ?0 }")
+    List<BlogEntity> findBlogEntitiesByApproved(boolean approved);
 
 }

@@ -4,6 +4,7 @@ import com.dogoo.miniblogs.model.BlogContent;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -13,8 +14,9 @@ import java.util.List;
 public class BlogEntity {
     @Id
     private String id;
-    @FullTextField
+    @TextIndexed
     private String title;
+    @TextIndexed
     private String summary;
     private String image;
     private String publicDate;

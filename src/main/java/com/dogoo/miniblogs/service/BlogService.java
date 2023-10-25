@@ -9,11 +9,15 @@ import com.dogoo.miniblogs.repository.BlogEntityRepository;
 import com.dogoo.miniblogs.repository.IBlogRepository;
 import com.dogoo.miniblogs.validator.AuthorValidator;
 import com.dogoo.miniblogs.validator.BlogValidator;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,7 +27,8 @@ public class BlogService implements BlogsApiDelegate {
     private final BlogMapper blogMapper;
     private final BlogValidator blogValidator;
     private final AuthorValidator authorValidator;
-
+    @Autowired
+    private MongoTemplate mongoTemplate;
     private final BlogEntityRepository blogEntityRepository;
 
     public BlogService(IBlogRepository blogRepository, BlogMapper blogMapper, BlogValidator blogValidator, AuthorValidator authorValidator, BlogEntityRepository blogEntityRepository) {
@@ -81,10 +86,24 @@ public class BlogService implements BlogsApiDelegate {
 
     @Override
     public ResponseEntity<List<Blog>> getBlogsByFilter(String key, Boolean approve) {
-        approve = approve != null && approve;
-        key = key == null ? "" : key;
-        List<Blog> blogs = blogMapper.mapBlogListFromBlogEntityList(blogRepository.findBlogEntitiesByTitleAndApproved(key, approve));
-        return ResponseEntity.ok(blogs);
+//        approve = approve != null && approve;
+//        key = key == null ? "" : key;
+//        List<Blog> blogs = blogMapper.mapBlogListFromBlogEntityList(blogRepository.findBlogEntitiesByTitleAndApproved(key, approve));
+//        return ResponseEntity.ok(blogs);
+        List<BlogEntity> blogs = new ArrayList<>();
+        blogs = blogRepository.findAll();
+        if (key.equalsIgnoreCase("") && approve == null) {
+            return ResponseEntity.ok(blogMapper.mapBlogListFromBlogEntityList(blogs));
+        } else if(key.equalsIgnoreCase("")  && approve != null) {
+            blogs.removeIf(blogEntity -> blogEntity.isApproved() != approve);
+        } else {
+            TextCriteria criteria = TextCriteria
+                    .forDefaultLanguage()
+                    .matchingPhrase(key);
+            Query query = TextQuery.queryText(criteria).sortByScore();
+            blogs = mongoTemplate.find(query, BlogEntity.class);
+        }
+        return ResponseEntity.ok(blogMapper.mapBlogListFromBlogEntityList(blogs));
     }
 
     @Override
