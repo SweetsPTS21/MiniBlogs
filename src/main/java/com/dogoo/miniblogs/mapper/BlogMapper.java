@@ -66,6 +66,19 @@ public class BlogMapper {
         return to;
     }
 
+    public BlogEntity mapBlogEntityFromBlogApproveReq(String id, BlogApproveReq from) {
+        BlogEntity to = todoRepository.findById(id).get();
+        LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formatDateTime = date.format(formatter);
+
+        to.setId(id);
+        to.setAuthorId(from.getAuthorId());
+        to.setApproved(from.getApproved());
+        to.setUpdatedDate(formatDateTime);
+        return to;
+    }
+
     public BlogEntity mapBlogEntityFromBlog(Blog from) {
         BlogEntity to = new BlogEntity();
         to.setId(from.getId());

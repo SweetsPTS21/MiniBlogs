@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<hibernate.search.version>6.1.1.Final</hibernate.search.version>
+		<cucumber.version>2.3.1</cucumber.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -26,7 +27,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -101,6 +102,35 @@
 			<artifactId>hibernate-search-backend-lucene</artifactId>
 			<version>${hibernate.search.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-spring</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock</artifactId>
+			<version>2.25.1</version>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 
 	<build>
@@ -123,11 +153,15 @@
 							<generatorName>spring</generatorName>
 							<apiPackage>com.dogoo.miniblogs.api</apiPackage>
 							<modelPackage>com.dogoo.miniblogs.model</modelPackage>
-							<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+							<invokerPackage>com.dogoo.miniblogs.handler</invokerPackage>
+							<generateSupportingFiles>true</generateSupportingFiles>
+							<supportingFilesToGenerate>ApiUtil.java, ApiClient.java</supportingFilesToGenerate>
 							<configOptions>
 								<delegatePattern>true</delegatePattern>
 								<serializableModel>true</serializableModel>
 							</configOptions>
+							<generateApis>true</generateApis>
+							<generateModels>true</generateModels>
 						</configuration>
 					</execution>
 				</executions>

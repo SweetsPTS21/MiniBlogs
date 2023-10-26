@@ -19,6 +19,9 @@ tags:
   - name: "contact"
     description: "Contact from user"
 
+security:
+  - bearerAuth: []
+
 paths:
   /blogs:
     get:

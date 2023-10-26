@@ -9,7 +9,6 @@ import com.dogoo.miniblogs.repository.BlogEntityRepository;
 import com.dogoo.miniblogs.repository.IBlogRepository;
 import com.dogoo.miniblogs.validator.AuthorValidator;
 import com.dogoo.miniblogs.validator.BlogValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
@@ -17,8 +16,9 @@ import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BlogService implements BlogsApiDelegate {
@@ -27,21 +27,21 @@ public class BlogService implements BlogsApiDelegate {
     private final BlogMapper blogMapper;
     private final BlogValidator blogValidator;
     private final AuthorValidator authorValidator;
-    @Autowired
-    private MongoTemplate mongoTemplate;
+
+    private final MongoTemplate mongoTemplate;
     private final BlogEntityRepository blogEntityRepository;
 
-    public BlogService(IBlogRepository blogRepository, BlogMapper blogMapper, BlogValidator blogValidator, AuthorValidator authorValidator, BlogEntityRepository blogEntityRepository) {
+    public BlogService(IBlogRepository blogRepository, BlogMapper blogMapper, BlogValidator blogValidator, AuthorValidator authorValidator, MongoTemplate mongoTemplate, BlogEntityRepository blogEntityRepository) {
         this.blogRepository = blogRepository;
         this.blogMapper = blogMapper;
         this.blogValidator = blogValidator;
         this.authorValidator = authorValidator;
+        this.mongoTemplate = mongoTemplate;
         this.blogEntityRepository = blogEntityRepository;
     }
 
     @Override
     public ResponseEntity<List<Blog>> getAllBlogs(Integer limit, Integer offset) {
-        //Pageable pageable = PageRequest.of(offset, limit);
         List<BlogEntity> blogEntities = blogEntityRepository.getAllByLimitAndOffset(limit, offset);
         List<Blog> blogs = blogMapper.mapBlogListFromBlogEntityList(blogEntities);
         return ResponseEntity.ok(blogs);
@@ -51,7 +51,12 @@ public class BlogService implements BlogsApiDelegate {
     public ResponseEntity<Blog> getBlogById(String id) {
         blogValidator.validateBlogExist(id);
 
-        Blog blog = blogMapper.mapBlogFromBlogEntity(blogRepository.findById(id).get());
+        Optional<BlogEntity> blogEntityOptional = blogRepository.findById(id);
+
+        if (blogEntityOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Blog blog = blogMapper.mapBlogFromBlogEntity(blogEntityOptional.get());
         return ResponseEntity.ok(blog);
     }
 
@@ -79,18 +84,18 @@ public class BlogService implements BlogsApiDelegate {
     public ResponseEntity<Blog> deleteBlog(String id) {
         blogValidator.validateBlogExist(id);
 
-        Blog blog = blogMapper.mapBlogFromBlogEntity(blogRepository.findById(id).get());
+        Optional<BlogEntity> blogEntityOptional = blogRepository.findById(id);
+        if (blogEntityOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Blog blog = blogMapper.mapBlogFromBlogEntity(blogEntityOptional.get());
         blogRepository.deleteById(id);
         return ResponseEntity.ok(blog);
     }
 
     @Override
     public ResponseEntity<List<Blog>> getBlogsByFilter(String key, Boolean approve) {
-//        approve = approve != null && approve;
-//        key = key == null ? "" : key;
-//        List<Blog> blogs = blogMapper.mapBlogListFromBlogEntityList(blogRepository.findBlogEntitiesByTitleAndApproved(key, approve));
-//        return ResponseEntity.ok(blogs);
-        List<BlogEntity> blogs = new ArrayList<>();
+        List<BlogEntity> blogs;
         blogs = blogRepository.findAll();
         if (key.equalsIgnoreCase("") && approve == null) {
             return ResponseEntity.ok(blogMapper.mapBlogListFromBlogEntityList(blogs));
@@ -108,7 +113,12 @@ public class BlogService implements BlogsApiDelegate {
 
     @Override
     public ResponseEntity<Blog> approveBlog(String id) {
-        BlogEntity blogEntity = blogRepository.findById(id).get();
+        Optional<BlogEntity> blogEntityOptional = blogRepository.findById(id);
+        if (blogEntityOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        BlogEntity blogEntity = blogEntityOptional.get();
         blogEntity.setApproved(true);
         blogRepository.save(blogEntity);
         return ResponseEntity.ok(blogMapper.mapBlogFromBlogEntity(blogEntity));
