@@ -31,7 +31,7 @@ public class BlogMapper {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formatDateTime = date.format(formatter);
 
-        to.setAuthorId(from.getAuthorId());
+        to.setAuthor(from.getAuthor());
         to.setSummary(from.getSummary());
         to.setTitle(from.getTitle());
         to.setSource(from.getSource());
@@ -54,7 +54,7 @@ public class BlogMapper {
         String formatDateTime = date.format(formatter);
 
         to.setId(id);
-        to.setAuthorId(from.getAuthorId());
+        to.setAuthorId(from.getAuthor());
         to.setSummary(from.getSummary());
         to.setTitle(from.getTitle());
         to.setSource(from.getSource());
@@ -73,24 +73,9 @@ public class BlogMapper {
         String formatDateTime = date.format(formatter);
 
         to.setId(id);
-        to.setAuthorId(from.getAuthorId());
+        to.setAuthorId(from.getAuthor());
         to.setApproved(from.getApproved());
         to.setUpdatedDate(formatDateTime);
-        return to;
-    }
-
-    public BlogEntity mapBlogEntityFromBlog(Blog from) {
-        BlogEntity to = new BlogEntity();
-        to.setId(from.getId());
-        to.setTitle(from.getTitle());
-        to.setSummary(from.getSummary());
-        to.setSource(from.getSource());
-        to.setPublicDate(from.getPublicDate());
-        to.setImage(from.getImage());
-        to.setCategories(from.getCategories());
-        to.setContent(from.getContent());
-        to.setUpdatedDate(from.getUpdateDate());
-        to.setApproved(from.getApproved());
         return to;
     }
 
@@ -106,16 +91,12 @@ public class BlogMapper {
         to.setContent(from.getContent());
         to.setCreateDate(from.getCreatedDate());
         to.setUpdateDate(from.getUpdatedDate());
-        to.setAuthorId(from.getAuthorId());
+        to.setAuthor(from.getAuthor());
         to.setApproved(from.isApproved());
         return to;
     }
 
     public List<Blog> mapBlogListFromBlogEntityList(List<BlogEntity> from) {
         return from.stream().map(this::mapBlogFromBlogEntity).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    public List<String> mapBlogCategoriesFromBlogEntityList(List<BlogEntity> from) {
-        return from.stream().map(this::mapBlogFromBlogEntity).map(Blog::getCategories).flatMap(List::stream).collect(Collectors.toList());
     }
 }

@@ -16,7 +16,7 @@ import java.util.Map;
 public class NotFoundExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class) // Apply to this kind of exception
-    public ResponseEntity<Object> handleNotFoundException(NotFoundException ex, WebRequest request) {
+    public ResponseEntity<Object> handleNotFoundException(NotFoundException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("status", HttpStatus.NOT_FOUND.value());
         body.put("error", HttpStatus.NOT_FOUND.getReasonPhrase());

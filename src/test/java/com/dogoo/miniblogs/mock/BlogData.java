@@ -12,6 +12,7 @@ import java.util.List;
 
 public class BlogData {
     public static String ID = "600f1c7b9c3b9e0b7c7b3b3b";
+    public static String TRUE_ID = "6534da21ecdc45244eabdbb9";
     public static String AUTHOR_ID = "600f1c7b9c3b9e0b7c7b3b3b";
     public static String SUMMARY = "This is summary";
     public static String TITLE = "This is title";
@@ -38,7 +39,7 @@ public class BlogData {
     public static Blog mockBlog() {
         Blog blog = new Blog();
         blog.setId(ID);
-        blog.setAuthorId(AUTHOR_ID);
+        blog.setAuthor(AUTHOR);
         blog.setSummary(SUMMARY);
         blog.setTitle(TITLE);
         blog.setSource(SOURCE);
@@ -60,7 +61,7 @@ public class BlogData {
 
     public static BlogReq mockBlogReq() {
         BlogReq blogReq = new BlogReq();
-        blogReq.setAuthorId(AUTHOR_ID);
+        blogReq.setAuthor(AUTHOR);
         blogReq.setSummary(SUMMARY);
         blogReq.setTitle(TITLE);
         blogReq.setSource(SOURCE);
@@ -73,7 +74,7 @@ public class BlogData {
 
     public static BlogApproveReq mockBlogApproveReq() {
         BlogApproveReq blogApproveReq = new BlogApproveReq();
-        blogApproveReq.setAuthorId(AUTHOR_ID);
+        blogApproveReq.setAuthor(AUTHOR);
         blogApproveReq.setBlogId(ID);
         blogApproveReq.setApproved(APPROVED);
         return blogApproveReq;

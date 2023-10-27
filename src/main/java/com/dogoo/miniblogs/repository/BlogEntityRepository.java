@@ -1,7 +1,6 @@
 package com.dogoo.miniblogs.repository;
 
 import com.dogoo.miniblogs.entity.BlogEntity;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;

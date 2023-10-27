@@ -7,7 +7,6 @@ import com.dogoo.miniblogs.model.Blog;
 import com.dogoo.miniblogs.model.BlogReq;
 import com.dogoo.miniblogs.repository.BlogEntityRepository;
 import com.dogoo.miniblogs.repository.IBlogRepository;
-import com.dogoo.miniblogs.validator.AuthorValidator;
 import com.dogoo.miniblogs.validator.BlogValidator;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -26,16 +25,14 @@ public class BlogService implements BlogsApiDelegate {
 
     private final BlogMapper blogMapper;
     private final BlogValidator blogValidator;
-    private final AuthorValidator authorValidator;
 
     private final MongoTemplate mongoTemplate;
     private final BlogEntityRepository blogEntityRepository;
 
-    public BlogService(IBlogRepository blogRepository, BlogMapper blogMapper, BlogValidator blogValidator, AuthorValidator authorValidator, MongoTemplate mongoTemplate, BlogEntityRepository blogEntityRepository) {
+    public BlogService(IBlogRepository blogRepository, BlogMapper blogMapper, BlogValidator blogValidator, MongoTemplate mongoTemplate, BlogEntityRepository blogEntityRepository) {
         this.blogRepository = blogRepository;
         this.blogMapper = blogMapper;
         this.blogValidator = blogValidator;
-        this.authorValidator = authorValidator;
         this.mongoTemplate = mongoTemplate;
         this.blogEntityRepository = blogEntityRepository;
     }
@@ -63,7 +60,6 @@ public class BlogService implements BlogsApiDelegate {
     @Override
     public ResponseEntity<Blog> createBlog(BlogReq blogReq) {
         blogValidator.validateAddBlog(blogReq);
-        authorValidator.validateAuthorExist(blogReq.getAuthorId());
 
         BlogEntity blogEntity = blogMapper.mapBlogEntityFromBlogReq(blogReq);
         Blog blog = blogMapper.mapBlogFromBlogEntity(blogRepository.save(blogEntity));
@@ -73,7 +69,6 @@ public class BlogService implements BlogsApiDelegate {
     @Override
     public ResponseEntity<Blog> updateBlog(String id, BlogReq blogReq) {
         blogValidator.validateUpdateBlog(id, blogReq);
-        authorValidator.validateAuthorExist(blogReq.getAuthorId());
 
         BlogEntity blogEntity = blogMapper.mapBlogEntityFromBlogReq(id, blogReq);
         Blog blog = blogMapper.mapBlogFromBlogEntity(blogRepository.save(blogEntity));

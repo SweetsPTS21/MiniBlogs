@@ -32,7 +32,7 @@ public class BlogMapperTest {
 
         BlogEntity blogEntity = mapper.mapBlogEntityFromBlogReq(blogReq);
 
-        assertEquals(blogEntity.getAuthorId(), blogReq.getAuthorId());
+        assertEquals(blogEntity.getAuthor(), blogReq.getAuthor());
         assertEquals(blogEntity.getSummary(), blogReq.getSummary());
         assertEquals(blogEntity.getTitle(), blogReq.getTitle());
         assertEquals(blogEntity.getSource(), blogReq.getSource());
@@ -52,7 +52,7 @@ public class BlogMapperTest {
 
         BlogEntity entity = mapper.mapBlogEntityFromBlogReq(BlogData.ID, blogReq);
 
-        assertEquals(entity.getAuthorId(), blogReq.getAuthorId());
+        assertEquals(entity.getAuthor(), blogReq.getAuthor());
         assertEquals(entity.getSummary(), blogReq.getSummary());
         assertEquals(entity.getTitle(), blogReq.getTitle());
         assertEquals(entity.getSource(), blogReq.getSource());

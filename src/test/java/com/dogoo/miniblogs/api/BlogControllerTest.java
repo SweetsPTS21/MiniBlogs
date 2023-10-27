@@ -2,7 +2,6 @@ package com.dogoo.miniblogs.api;
 
 import com.dogoo.miniblogs.mock.BlogData;
 import com.dogoo.miniblogs.model.Blog;
-import com.dogoo.miniblogs.model.BlogApproveReq;
 import com.dogoo.miniblogs.model.BlogReq;
 import com.dogoo.miniblogs.service.BlogService;
 import com.dogoo.miniblogs.validator.BlogValidator;
@@ -73,7 +72,43 @@ public class BlogControllerTest {
     }
 
     @Test
-    public void testEndpointSearchBlog() {
+    public void testEndpointDeleteBlog() {
+        when(service.deleteBlog(anyString()))
+                .thenReturn(ResponseEntity.ok(BlogData.mockBlog()));
+
+        ResponseEntity<Blog> responseEntity =
+                controller.deleteBlog(BlogData.ID);
+
+        assertStatus200(responseEntity.getStatusCode());
+        assertBlog(responseEntity.getBody());
+    }
+
+    @Test
+    public void testEndpointGetAllBlogs() {
+        when(service.getAllBlogs(any(), any()))
+                .thenReturn(ResponseEntity.ok(BlogData.mockBlogList()));
+
+        ResponseEntity<List<Blog>> responseEntity =
+                controller.getAllBlogs(5, 0);
+
+        assertStatus200(responseEntity.getStatusCode());
+        assertProperties(responseEntity.getBody());
+    }
+
+    @Test
+    public void testEndpointGetBlogById() {
+        when(service.getBlogById(anyString()))
+                .thenReturn(ResponseEntity.ok(BlogData.mockBlog()));
+
+        ResponseEntity<Blog> responseEntity =
+                controller.getBlogById(BlogData.ID);
+
+        assertStatus200(responseEntity.getStatusCode());
+        assertBlog(responseEntity.getBody());
+    }
+
+    @Test
+    public void testEndpointGetBlogsByFilter() {
         when(service.getBlogsByFilter(anyString(), any()))
                 .thenReturn(ResponseEntity.ok(BlogData.mockBlogList()));
 
@@ -86,7 +121,7 @@ public class BlogControllerTest {
 
     private void assertBlog(Blog actual) {
        assertEquals(actual.getId(), BlogData.ID);
-       assertEquals(actual.getAuthorId(), BlogData.AUTHOR_ID);
+       assertEquals(actual.getAuthor(), BlogData.AUTHOR);
        assertEquals(actual.getSummary(), BlogData.SUMMARY);
        assertEquals(actual.getTitle(), BlogData.TITLE);
        assertEquals(actual.getSource(), BlogData.SOURCE);

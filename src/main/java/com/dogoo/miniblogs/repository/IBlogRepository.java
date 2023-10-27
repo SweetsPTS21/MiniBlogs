@@ -10,8 +10,6 @@ import java.util.List;
 
 @Repository
 public interface IBlogRepository extends MongoRepository<BlogEntity, String> {
-    @Query("{'authorId': ?0}")
-    List<BlogEntity> getBlogEntitiesByAuthorId(String authorId);
     @Query("{'approved': ?0 }")
     List<BlogEntity> findBlogEntitiesByApproved(boolean approved);
 
